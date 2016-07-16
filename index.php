@@ -8,7 +8,7 @@ $array['timestamp'] = $_GET['timestamp'];
 $array['nonce'] = $_GET['nonce'];
 $array['token'] = 'mytest';
 $signature = $_GET['signature'];
-sort($array)
+sort($array);
 $temstr = implode('', $array);
 $temstr = sha1($temstr);
 if ($temstr == $signature) {
