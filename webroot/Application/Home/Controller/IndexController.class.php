@@ -152,11 +152,21 @@ class IndexController extends Controller
     }
 
     /**
-     *
+     * 获取微信AccessToken
      */
     public function getAccessToken(){
         $requestUrl = 'https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid='.$this->_appid.'&secret='.$this->_secret;
         $access_token = $this->httpRequest($requestUrl);
         echo $access_token;
+    }
+
+
+    /**
+     * 获取微信服务器ip
+     */
+    public function getWXServerIp(){
+        $requestUrl = 'https://api.weixin.qq.com/cgi-bin/getcallbackip?access_token='.$this->getAccessToken();
+        $serverIp = $this->httpRequest($requestUrl);
+        printf($serverIp);
     }
 }
