@@ -61,13 +61,42 @@ class IndexController extends Controller
                 $formUser = $postObj->ToUserName;
                 $msgType = 'text';
                 $time = time();
-                switch(strtolower($postObj->Content)){
+                switch(trim($postObj->Content)){
                     case '我是谁':
                         $content = '你是::'.$toUser;
                         break;
                     case '哪里学编程':
                         $content = '<a href="http://www.imooc.com">慕课网</a>';
                         break;
+                    case '福利':
+                        $itemarr = array(
+                            array(
+                                'title'=>'福利放送',
+                                'description'=>'每周一福利',
+                                'picurl'=>'http://img1.mm131.com/pic/2557/0.jpg',
+                                'url'=>'http://www.mm131.com/xinggan/2557.html'
+                            ),
+                        );
+                        $reply_template = "<xml>
+                            <ToUserName><![CDATA[".$toUser."]]></ToUserName>
+                            <FromUserName><![CDATA[".$formUser."]]></FromUserName>
+                            <CreateTime>".time()."</CreateTime>
+                            <MsgType><![CDATA[news]]></MsgType>
+                            <ArticleCount>".count($itemarr)."</ArticleCount>
+                            <Articles>";
+                        foreach($itemarr as $k=>$v) {
+                            $reply_template .= "<item>
+                            <Title><![CDATA[".$v['title']."]]></Title>
+                            <Description><![CDATA[".$v['description']."]]></Description>
+                            <PicUrl><![CDATA[".$v['picurl']."]]></PicUrl>
+                            <Url><![CDATA[".$v['url']."]]></Url>
+                            </item>";
+                        }
+                        $reply_template .="
+                            </Articles>
+                            </xml>";
+                        echo $reply_template;
+                        exit;
                     default:
                         $content = '谢谢光临代码民工小站！';
                 }
