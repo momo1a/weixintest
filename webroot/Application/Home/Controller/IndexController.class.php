@@ -6,6 +6,19 @@ use Think\Controller;
 
 class IndexController extends Controller
 {
+    /**
+     * APPID
+     * @var string
+     */
+    var $_appid = 'wxf1f337c34f6713ea';
+
+    /**
+     * APPSECRET
+     * @var string
+     */
+    var $_secret = 'a2a9286da291d95bf87fb01ae4323b05';
+
+
     public function index()
     {
         //echo "hello weixin";
@@ -125,14 +138,25 @@ class IndexController extends Controller
     }
 
 
-    //HTTP请求
+    /**
+     * @param $url  Request Target URL
+     */
 
-    public function httpRequest(){
+    public function httpRequest($url){
         $ch = curl_init();
-        $url = 'http://www.baidu.com';
         curl_setopt($ch,CURLOPT_URL,$url);
+        curl_setopt($ch,CURLOPT_TIMEOUT,5);
         curl_setopt($ch,CURLOPT_RETURNTRANSFER,1);
         $output = curl_exec($ch);
         echo $output;
+    }
+
+    /**
+     *
+     */
+    public function getAccessToken(){
+        $requestUrl = 'https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid='.$this->_appid.'&secret='.$this->_secret;
+        $access_token = $this->httpRequest($requestUrl);
+        echo $access_token;
     }
 }
