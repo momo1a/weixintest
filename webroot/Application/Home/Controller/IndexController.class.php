@@ -61,7 +61,7 @@ class IndexController extends Controller
                 $toUser = $postObj->FromUserName;
                 $formUser = $postObj->ToUserName;
                 $msgType = 'text';
-                $content = '你是::'.$postObj->FormUserName;
+                $content = '你是::'.$toUser;
                 $time = time();
                 $reply_template = "<xml><ToUserName><![CDATA[%s]]></ToUserName>
                                     <FromUserName><![CDATA[%s]]></FromUserName>
