@@ -148,6 +148,8 @@ class IndexController extends Controller
         curl_setopt($ch,CURLOPT_TIMEOUT,5);
         curl_setopt($ch,CURLOPT_RETURNTRANSFER,1);
         $output = curl_exec($ch);
+
+        curl_close($ch);
         echo $output;
     }
 
@@ -157,7 +159,7 @@ class IndexController extends Controller
     public function getAccessToken(){
         $requestUrl = 'https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid='.$this->_appid.'&secret='.$this->_secret;
         $access_token = $this->httpRequest($requestUrl);
-        echo $access_token;
+        return $access_token;
     }
 
 
@@ -167,6 +169,11 @@ class IndexController extends Controller
     public function getWXServerIp(){
         $requestUrl = 'https://api.weixin.qq.com/cgi-bin/getcallbackip?access_token='.$this->getAccessToken();
         $serverIp = $this->httpRequest($requestUrl);
-        printf($serverIp);
+        return $serverIp;
+    }
+
+    public function show(){
+        $res = $this->getWXServerIp();
+        var_dump($res);
     }
 }
