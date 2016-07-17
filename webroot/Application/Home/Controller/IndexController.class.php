@@ -82,6 +82,12 @@ class IndexController extends Controller
                                 'picurl'=>'http://s1.dwstatic.com/group1/M00/2F/63/2f63078b323b9129845f06d88b3c55932195.png',
                                 'url'=>'http://tu.duowan.com/gallery/126222.html#p1'
                             ),
+                            array(
+                                'title'=>'第三波福利特别献给神将',
+                                'description'=>'每周第三福利福利',
+                                'picurl'=>'http://s1.dwstatic.com/group1/M00/F3/84/58ee3e72c0b862bb4d270a0a3bfffb5e.jpg',
+                                'url'=>'http://tu.duowan.com/gallery/124997.html#p1'
+                            ),
                         );
                         $reply_template = "<xml>
                             <ToUserName><![CDATA[".$toUser."]]></ToUserName>
