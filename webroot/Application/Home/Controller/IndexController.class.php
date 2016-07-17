@@ -166,7 +166,7 @@ class IndexController extends Controller
      * 获取微信服务器ip
      */
     public function getWXServerIp(){
-        $requestUrl = 'https://api.weixin.qq.com/cgi-bin/getcallbackip?access_token='.$this->getAccessToken();
+        $requestUrl = 'https://api.weixin.qq.com/cgi-bin/getcallbackip?access_token=100t8vbV6JB0OoyidAKtz3WBf0QTFs3EbAqfP3G8SgnSn5ZfqMIaX1KtAjhWDR3hU4ncr4SsUH3BQyPRJJgVkseO7EtlkXc55oeV38XKS_IOPyQHknR2uQLM65OFecTbCINaADATZE';
         $serverIp = $this->httpRequest($requestUrl);
         return $serverIp;
     }
