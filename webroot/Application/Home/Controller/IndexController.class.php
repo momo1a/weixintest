@@ -148,7 +148,6 @@ class IndexController extends Controller
         curl_setopt($ch,CURLOPT_TIMEOUT,5);
         curl_setopt($ch,CURLOPT_RETURNTRANSFER,1);
         $output = curl_exec($ch);
-
         curl_close($ch);
         return $output;
     }
@@ -173,7 +172,9 @@ class IndexController extends Controller
     }
 
     public function show(){
-        $res = $this->getWXServerIp();
-        var_dump($res);
+        $token = $this->getAccessToken();
+        $serverIp = $this->getWXServerIp();
+        var_dump($serverIp);
+        var_dump($token);
     }
 }
