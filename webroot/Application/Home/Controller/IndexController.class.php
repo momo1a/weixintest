@@ -123,4 +123,16 @@ class IndexController extends Controller
 
         }
     }
+
+
+    //HTTP请求
+
+    public function httpRequest(){
+        $ch = curl_init();
+        $url = 'http://www.baidu.com';
+        curl_setopt($ch,CURLOPT_URL,$url);
+        curl_setopt($ch,CURLOPT_RETURNTRANSFER,1);
+        $output = curl_exec($ch);
+        echo $output;
+    }
 }
