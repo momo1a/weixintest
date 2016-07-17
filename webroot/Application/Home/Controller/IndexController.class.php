@@ -35,12 +35,33 @@ class IndexController extends Controller
     {
         $postArr = file_get_contents('php://input');
         $postObj = simplexml_load_string($postArr);
+
+        //关注事件触发
         if (strtolower($postObj->MsgType) == 'event') {
             if (strtolower($postObj->Event) == 'subscribe') {
                 $toUser = $postObj->FromUserName;
                 $formUser = $postObj->ToUserName;
                 $msgType = 'text';
                 $content = '欢迎关注我们！我们是神将，会飞天的！！';
+                $time = time();
+                $reply_template = "<xml><ToUserName><![CDATA[%s]]></ToUserName>
+                                    <FromUserName><![CDATA[%s]]></FromUserName>
+                                    <CreateTime>%s</CreateTime>
+                                    <MsgType><![CDATA[%s]]></MsgType>
+                                    <Content><![CDATA[%s]]></Content>
+                                    </xml>";
+                $info = sprintf($reply_template, $toUser, $formUser, $time, $msgType, $content);
+                echo $info;
+            }
+        }
+
+        //自动回复消息
+        if (strtolower($postObj->MsgType) == 'text') {
+            if (strtolower($postObj->Content) == '我是谁') {
+                $toUser = $postObj->FromUserName;
+                $formUser = $postObj->ToUserName;
+                $msgType = 'text';
+                $content = '你是::'.$postObj->FormUserName;
                 $time = time();
                 $reply_template = "<xml><ToUserName><![CDATA[%s]]></ToUserName>
                                     <FromUserName><![CDATA[%s]]></FromUserName>
