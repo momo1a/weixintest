@@ -55,14 +55,22 @@ class IndexController extends Controller
             }
         }
 
-        //自动回复消息
+        //纯文本自动回复消息
         if (strtolower($postObj->MsgType) == 'text') {
-            if (strtolower($postObj->Content) == '我是谁') {
                 $toUser = $postObj->FromUserName;
                 $formUser = $postObj->ToUserName;
                 $msgType = 'text';
-                $content = '你是::'.$toUser;
                 $time = time();
+                switch(strtolower($postObj->Content)){
+                    case '我是谁':
+                        $content = '你是::'.$toUser;
+                        break;
+                    case '哪里学编程':
+                        $content = '<a href="http://www.imooc.com">慕课网</a>';
+                        break;
+                    default:
+                        $content = '谢谢光临代码民工小站！';
+                }
                 $reply_template = "<xml><ToUserName><![CDATA[%s]]></ToUserName>
                                     <FromUserName><![CDATA[%s]]></FromUserName>
                                     <CreateTime>%s</CreateTime>
@@ -71,7 +79,7 @@ class IndexController extends Controller
                                     </xml>";
                 $info = sprintf($reply_template, $toUser, $formUser, $time, $msgType, $content);
                 echo $info;
-            }
+
         }
     }
 }
