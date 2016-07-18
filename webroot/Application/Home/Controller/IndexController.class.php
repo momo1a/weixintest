@@ -177,4 +177,10 @@ class IndexController extends Controller
         var_dump($serverIp);
         var_dump($token);
     }
+
+	public function test(){
+		phpinfo();
+	}
+
+
 }
