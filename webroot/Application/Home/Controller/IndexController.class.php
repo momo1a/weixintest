@@ -32,6 +32,10 @@ class IndexController extends Controller
 
     protected static $_CITY = array();
 
+    public function __construct(){
+        self::$_CITY = $this->mysqlAction();
+    }
+
     public function index()
     {
         //echo "hello weixin";
@@ -138,7 +142,6 @@ class IndexController extends Controller
                         exit;
                         /** 多图文end **/
                     default:
-                        self::$_CITY = $this->mysqlAction();
                         if(in_array(trim($postObj->Content),self::$_CITY)){
                             $value = $this->getWeather(trim($postObj->Content));
                             $max = $value['HeWeather data service 3.0'][0]['daily_forecast'][0]['tmp']['max'];
