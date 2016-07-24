@@ -96,8 +96,8 @@ class IndexController extends Controller
                     case '哪里学编程':
                         $content = '<a href="http://www.imooc.com">慕课网</a>';
                         break;
-                    case $city:
-                        $content =  $this->getWeather($city);
+                    case '南宁':
+                        $content = $this->getWeather('南宁');
                         break;
                     case '福利':
                         $itemarr = array(
@@ -140,8 +140,8 @@ class IndexController extends Controller
                             </xml>";
                         echo $reply_template;
                         exit;
-                   // default:
-                     //   $content = '谢谢光临代码民工小站！';
+                    default:
+                        $content = '谢谢光临代码民工小站！';
                 }
                 $reply_template = "<xml><ToUserName><![CDATA[%s]]></ToUserName>
                                     <FromUserName><![CDATA[%s]]></FromUserName>
