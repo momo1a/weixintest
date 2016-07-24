@@ -200,7 +200,8 @@ class IndexController extends Controller
             'apikey: '.$this->_apiKey,
         );
         $result = $this->httpRequest($requestUrl,$header);
-        return $result;
+        $resultArr = json_decode($result,true);
+        return $resultArr['HeWeather data service 3.0'][0]['daily_forecast'][0]['tmp']['max'];
     }
 
 
@@ -213,8 +214,8 @@ class IndexController extends Controller
     }
 
 	public function test(){
-        $result = $this->getWeather("北京");
-        echo $result;exit;
+        $result = $this->getWeather("南宁");
+       print_r($result['HeWeather data service 3.0'][0]['daily_forecast'][0]['tmp']['max']);exit;
         //phpinfo();exit;
         $m = new \Memcache();
         $m->addServer("47.89.11.105",'11211');
