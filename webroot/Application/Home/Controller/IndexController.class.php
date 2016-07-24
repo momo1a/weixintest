@@ -146,6 +146,7 @@ class IndexController extends Controller
                             $max = $value['HeWeather data service 3.0'][0]['daily_forecast'][0]['tmp']['max'];
                             $min = $value['HeWeather data service 3.0'][0]['daily_forecast'][0]['tmp']['min'];
                             $content = '最高温度'.$max.'°，最低温度'.$min.'°';
+                            $postObj->Content = null;
                         }else{
                             $content = '谢谢光临代码民工小站！';
                         }
@@ -224,8 +225,11 @@ class IndexController extends Controller
     }
 
 	public function test(){
-        $result = $this->getWeather("永福");
-       print_r($result);exit;
+        $result = $this->getWeather("桂林");
+        print_r($result);
+        echo '<br/>';
+        $result = $this->getWeather('南宁');
+        print_r($result['HeWeather data service 3.0'][0]['daily_forecast'][0]['tmp']['min']);exit;
         //phpinfo();exit;
         $m = new \Memcache();
         $m->addServer("47.89.11.105",'11211');
