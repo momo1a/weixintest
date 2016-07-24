@@ -140,8 +140,8 @@ class IndexController extends Controller
                             </xml>";
                         echo $reply_template;
                         exit;
-                    default:
-                        $content = '谢谢光临代码民工小站！';
+                   // default:
+                     //   $content = '谢谢光临代码民工小站！';
                 }
                 $reply_template = "<xml><ToUserName><![CDATA[%s]]></ToUserName>
                                     <FromUserName><![CDATA[%s]]></FromUserName>
