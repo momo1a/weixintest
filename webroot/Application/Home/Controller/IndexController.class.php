@@ -18,6 +18,21 @@ class IndexController extends Controller
      */
     var $_secret = 'a2a9286da291d95bf87fb01ae4323b05';
 
+    /**
+     * apiStorm即用APIkey
+     * @var string
+     */
+    var $_apiKey = 'dc99c891a8b076d22cc9bcb069679354';
+
+    /**
+     * 天气预报接口地址
+     * @var string
+     */
+    var $_weatherUrl = 'http://apis.baidu.com/heweather/weather/free';
+
+    public function __construct(){
+        header("content-type:text/html;charset:utf-8");
+    }
 
     public function index()
     {
@@ -44,7 +59,7 @@ class IndexController extends Controller
 
     //接收事件推送并回复
 
-    public function response()
+    public function response($city="南宁")
     {
         $postArr = file_get_contents('php://input');
         $postObj = simplexml_load_string($postArr);
@@ -80,6 +95,9 @@ class IndexController extends Controller
                         break;
                     case '哪里学编程':
                         $content = '<a href="http://www.imooc.com">慕课网</a>';
+                        break;
+                    case $city:
+                        $content =  $this->getWeather($city);
                         break;
                     case '福利':
                         $itemarr = array(
@@ -140,11 +158,13 @@ class IndexController extends Controller
 
     /**
      * @param $url  Request Target URL
+     * @param $header HTTP REQUEST HEADER
      */
 
-    public function httpRequest($url){
+    public function httpRequest($url,$header=array()){
         $ch = curl_init();
         curl_setopt($ch,CURLOPT_URL,$url);
+        curl_setopt($ch,CURLOPT_HTTPHEADER,$header);
         curl_setopt($ch,CURLOPT_TIMEOUT,5);
         curl_setopt($ch,CURLOPT_RETURNTRANSFER,1);
         $output = curl_exec($ch);
@@ -171,6 +191,20 @@ class IndexController extends Controller
         return $serverIp;
     }
 
+    /**
+     * @param $city  城市
+     */
+    public function getWeather($city){
+        $requestUrl= $this->_weatherUrl.'?city='.$city;
+        $header =   $header = array(
+            'apikey: '.$this->_apiKey,
+        );
+        $result = $this->httpRequest($requestUrl,$header);
+        return $result;
+    }
+
+
+
     public function show(){
         $token = $this->getAccessToken();
         $serverIp = $this->getWXServerIp();
@@ -179,12 +213,14 @@ class IndexController extends Controller
     }
 
 	public function test(){
-        $m = new \Memcached();
+        $result = $this->getWeather("北京");
+        echo $result;exit;
+        //phpinfo();exit;
+        $m = new \Memcache();
         $m->addServer("47.89.11.105",'11211');
-        //var_dump($server);exit;
-        $m->set('mykey',md5(range(10000,20000)),60);
-        $a = $m->get('mykey');
-        var_dump($a);
+        $m->set('k',md5('ii'));
+        $i = $m->get('k');
+        var_dump($i);
 	}
 
 
