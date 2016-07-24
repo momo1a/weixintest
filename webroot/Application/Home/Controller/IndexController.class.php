@@ -146,7 +146,7 @@ class IndexController extends Controller
                             $lon = $value['HeWeather data service 3.0'][0]['basic']['lon'];
                             $update = $value['HeWeather data service 3.0'][0]['basic']['update']['loc'];
                             $cnty = $value['HeWeather data service 3.0'][0]['basic']['cnty'];
-                            $content = '所属国家：'.$cnty.'\n最高温度：'.$max.'°\n最低温度：'.$min.'\n地理经度：'.$lon.'\n地理纬度：'.$lat.'\更新时间：'.$update;
+                            $content = '所属国家：'.$cnty."\n".'最高温度：'.$max.'°'."\n".'最低温度：'.$min."\n".'地理经度：'.$lon."\n".'地理纬度：'.$lat."\n".'更新时间：'.$update;
                         }else{
                             $content = '谢谢光临代码民工小站！';
                         }
