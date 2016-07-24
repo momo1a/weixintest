@@ -230,6 +230,8 @@ class IndexController extends Controller
 
 	public function test(){
         var_dump(self::$_CITY);
+        echo '<hr/>';
+        var_dump(array('北京','上海'));
         exit;
         $result = $this->getWeather("桂林");
         print_r($result);
@@ -248,7 +250,11 @@ class IndexController extends Controller
         $mysqlClient = mysqli_connect('47.89.11.105','root', 'moting99a', 'weixin', '3306');
         $query = $mysqlClient->query('select `name_chs` from t_location WHERE parent_id != 0 limit 20');
         $res = $query->fetch_all();
-        return $res;
+        $data = array();
+        foreach($res as $v){
+            array_push($data,$v[0]);
+        }
+        return $data;
     }
 
 }
