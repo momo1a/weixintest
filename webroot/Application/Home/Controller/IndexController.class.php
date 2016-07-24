@@ -30,7 +30,7 @@ class IndexController extends Controller
      */
     var $_weatherUrl = 'http://apis.baidu.com/heweather/weather/free';
 
-    protected static $_CITY = array('南宁','桂林');
+    protected static $_CITY = array('南宁','桂林','北京','上海');
 
     public function index()
     {
@@ -146,7 +146,6 @@ class IndexController extends Controller
                             $max = $value['HeWeather data service 3.0'][0]['daily_forecast'][0]['tmp']['max'];
                             $min = $value['HeWeather data service 3.0'][0]['daily_forecast'][0]['tmp']['min'];
                             $content = '最高温度'.$max.'°，最低温度'.$min.'°';
-                            $postObj->Content = null;
                         }else{
                             $content = '谢谢光临代码民工小站！';
                         }
@@ -227,9 +226,9 @@ class IndexController extends Controller
 	public function test(){
         $result = $this->getWeather("桂林");
         print_r($result);
-        echo '<br/>';
+        echo '<hr/>';
         $result = $this->getWeather('南宁');
-        print_r($result['HeWeather data service 3.0'][0]['daily_forecast'][0]['tmp']['min']);exit;
+        print_r($result['HeWeather data service 3.0'][0]['daily_forecast'][0]['tmp']['max']);exit;
         //phpinfo();exit;
         $m = new \Memcache();
         $m->addServer("47.89.11.105",'11211');
