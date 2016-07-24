@@ -30,7 +30,7 @@ class IndexController extends Controller
      */
     var $_weatherUrl = 'http://apis.baidu.com/heweather/weather/free';
 
-    protected static $_CITY = array('南宁','桂林','北京','上海');
+    protected static $_CITY = array('南宁','桂林','北京','上海','莫斯科','阿姆斯特丹');
 
     public function index()
     {
@@ -94,9 +94,6 @@ class IndexController extends Controller
                     case '哪里学编程':
                         $content = '<a href="http://www.imooc.com">慕课网</a>';
                         break;
-                    case '南宁':
-                        $content = $this->getWeather('南宁');
-                        break;
                     case '福利':
                         /** 多图文回复 **/
                         $itemarr = array(
@@ -145,7 +142,11 @@ class IndexController extends Controller
                             $value = $this->getWeather(trim($postObj->Content));
                             $max = $value['HeWeather data service 3.0'][0]['daily_forecast'][0]['tmp']['max'];
                             $min = $value['HeWeather data service 3.0'][0]['daily_forecast'][0]['tmp']['min'];
-                            $content = '最高温度'.$max.'°，最低温度'.$min.'°';
+                            $lat = $value['HeWeather data service 3.0'][0]['basic']['lat'];
+                            $lon = $value['HeWeather data service 3.0'][0]['basic']['lon'];
+                            $update = $value['HeWeather data service 3.0'][0]['basic']['update']['loc'];
+                            $cnty = $value['HeWeather data service 3.0'][0]['basic']['cnty'];
+                            $content = '所属国家：'.$cnty.'\n最高温度：'.$max.'°\n最低温度：'.$min.'\n地理经度：'.$lon.'\n地理纬度：'.$lat.'\更新时间：'.$update;
                         }else{
                             $content = '谢谢光临代码民工小站！';
                         }
