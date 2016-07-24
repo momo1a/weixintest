@@ -30,9 +30,7 @@ class IndexController extends Controller
      */
     var $_weatherUrl = 'http://apis.baidu.com/heweather/weather/free';
 
-    public function __construct(){
-        header("content-type:text/html;charset:utf-8");
-    }
+    protected static $_CITY = array('南宁','桂林');
 
     public function index()
     {
@@ -59,7 +57,7 @@ class IndexController extends Controller
 
     //接收事件推送并回复
 
-    public function response($city="南宁")
+    public function response()
     {
         $postArr = file_get_contents('php://input');
         $postObj = simplexml_load_string($postArr);
@@ -100,6 +98,7 @@ class IndexController extends Controller
                         $content = $this->getWeather('南宁');
                         break;
                     case '福利':
+                        /** 多图文回复 **/
                         $itemarr = array(
                             array(
                                 'title'=>'福利放送',
@@ -140,15 +139,26 @@ class IndexController extends Controller
                             </xml>";
                         echo $reply_template;
                         exit;
+                        /** 多图文end **/
                     default:
-                        $content = '谢谢光临代码民工小站！';
+                        if(in_array(trim($postObj->Content),self::$_CITY)){
+                            $value = $this->getWeather(trim($postObj->Content));
+                            $max = $value['HeWeather data service 3.0'][0]['daily_forecast'][0]['tmp']['max'];
+                            $min = $value['HeWeather data service 3.0'][0]['daily_forecast'][0]['tmp']['min'];
+                            $content = '最高温度'.$max.'°，最低温度'.$min.'°';
+                        }else{
+                            $content = '谢谢光临代码民工小站！';
+                        }
+
                 }
+
                 $reply_template = "<xml><ToUserName><![CDATA[%s]]></ToUserName>
                                     <FromUserName><![CDATA[%s]]></FromUserName>
                                     <CreateTime>%s</CreateTime>
                                     <MsgType><![CDATA[%s]]></MsgType>
                                     <Content><![CDATA[%s]]></Content>
                                     </xml>";
+
                 $info = sprintf($reply_template, $toUser, $formUser, $time, $msgType, $content);
                 echo $info;
 
@@ -201,7 +211,7 @@ class IndexController extends Controller
         );
         $result = $this->httpRequest($requestUrl,$header);
         $resultArr = json_decode($result,true);
-        return $resultArr['HeWeather data service 3.0'][0]['daily_forecast'][0]['tmp']['max'];
+        return $resultArr;
     }
 
 
@@ -214,8 +224,8 @@ class IndexController extends Controller
     }
 
 	public function test(){
-        $result = $this->getWeather("南宁");
-       print_r($result['HeWeather data service 3.0'][0]['daily_forecast'][0]['tmp']['max']);exit;
+        $result = $this->getWeather("永福");
+       print_r($result);exit;
         //phpinfo();exit;
         $m = new \Memcache();
         $m->addServer("47.89.11.105",'11211');
