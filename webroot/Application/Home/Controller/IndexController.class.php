@@ -30,7 +30,11 @@ class IndexController extends Controller
      */
     var $_weatherUrl = 'http://apis.baidu.com/heweather/weather/free';
 
-    protected static $_CITY = array('南宁','桂林','北京','上海','莫斯科','阿姆斯特丹');
+    protected static $_CITY = array();
+
+    public function __construct(){
+        self::$_CITY = $this->mysqlAction();
+    }
 
     public function index()
     {
@@ -225,6 +229,8 @@ class IndexController extends Controller
     }
 
 	public function test(){
+        $this->mysqlAction();
+        exit;
         $result = $this->getWeather("桂林");
         print_r($result);
         echo '<hr/>';
@@ -238,5 +244,11 @@ class IndexController extends Controller
         var_dump($i);
 	}
 
+    protected function mysqlAction(){
+        $mysqlClient = mysqli_connect('47.89.11.105','root', 'moting99a', 'weixin', '3306');
+        $query = $mysqlClient->query('select `name_chs` from t_location WHERE parent_id != 0');
+        $res = $query->fetch_all();
+        return $res;
+    }
 
 }
