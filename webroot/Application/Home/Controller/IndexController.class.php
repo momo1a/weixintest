@@ -179,7 +179,10 @@ class IndexController extends Controller
     }
 
 	public function test(){
-		phpinfo();
+        $m = new \Memcached();
+        $server = $m->addServer("47.98.11.105",'11211');
+        var_dump($server);
+		//phpinfo();
 	}
 
 
