@@ -181,6 +181,7 @@ class IndexController extends Controller
 	public function test(){
         $m = new \Memcached();
         $server = $m->addServer("47.98.11.105",'11211');
+        var_dump($server);exit;
         $m->set('mykey',md5(range(10000,20000)));
         $a = $m->get('mykey');
         var_dump($a);
