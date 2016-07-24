@@ -229,7 +229,7 @@ class IndexController extends Controller
     }
 
 	public function test(){
-        $this->mysqlAction();
+        var_dump(self::$_CITY);
         exit;
         $result = $this->getWeather("桂林");
         print_r($result);
@@ -246,7 +246,7 @@ class IndexController extends Controller
 
     protected function mysqlAction(){
         $mysqlClient = mysqli_connect('47.89.11.105','root', 'moting99a', 'weixin', '3306');
-        $query = $mysqlClient->query('select `name_chs` from t_location WHERE parent_id != 0');
+        $query = $mysqlClient->query('select `name_chs` from t_location WHERE parent_id != 0 limit 20');
         $res = $query->fetch_all();
         return $res;
     }
