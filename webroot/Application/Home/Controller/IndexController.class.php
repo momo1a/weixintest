@@ -18,6 +18,23 @@ class IndexController extends Controller
      */
     var $_secret = 'a2a9286da291d95bf87fb01ae4323b05';
 
+    /**
+     * apiStorm即用APIkey
+     * @var string
+     */
+    var $_apiKey = 'dc99c891a8b076d22cc9bcb069679354';
+
+    /**
+     * 天气预报接口地址
+     * @var string
+     */
+    var $_weatherUrl = 'http://apis.baidu.com/heweather/weather/free';
+
+    protected static $_CITY = array();
+
+    public function __construct(){
+        self::$_CITY = $this->mysqlAction();
+    }
 
     public function index()
     {
@@ -82,6 +99,7 @@ class IndexController extends Controller
                         $content = '<a href="http://www.imooc.com">慕课网</a>';
                         break;
                     case '福利':
+                        /** 多图文回复 **/
                         $itemarr = array(
                             array(
                                 'title'=>'福利放送',
@@ -122,15 +140,30 @@ class IndexController extends Controller
                             </xml>";
                         echo $reply_template;
                         exit;
+                        /** 多图文end **/
                     default:
-                        $content = '谢谢光临代码民工小站！';
+                        if(in_array(trim($postObj->Content),self::$_CITY)){
+                            $value = $this->getWeather(trim($postObj->Content));
+                            $max = $value['HeWeather data service 3.0'][0]['daily_forecast'][0]['tmp']['max'];
+                            $min = $value['HeWeather data service 3.0'][0]['daily_forecast'][0]['tmp']['min'];
+                            $lat = $value['HeWeather data service 3.0'][0]['basic']['lat'];
+                            $lon = $value['HeWeather data service 3.0'][0]['basic']['lon'];
+                            $update = $value['HeWeather data service 3.0'][0]['basic']['update']['loc'];
+                            $cnty = $value['HeWeather data service 3.0'][0]['basic']['cnty'];
+                            $content = '所属国家：'.$cnty."\n".'最高温度：'.$max.'°'."\n".'最低温度：'.$min."\n".'地理经度：'.$lon."\n".'地理纬度：'.$lat."\n".'更新时间：'.$update;
+                        }else{
+                            $content = '谢谢光临代码民工小站！';
+                        }
+
                 }
+
                 $reply_template = "<xml><ToUserName><![CDATA[%s]]></ToUserName>
                                     <FromUserName><![CDATA[%s]]></FromUserName>
                                     <CreateTime>%s</CreateTime>
                                     <MsgType><![CDATA[%s]]></MsgType>
                                     <Content><![CDATA[%s]]></Content>
                                     </xml>";
+
                 $info = sprintf($reply_template, $toUser, $formUser, $time, $msgType, $content);
                 echo $info;
 
@@ -140,11 +173,13 @@ class IndexController extends Controller
 
     /**
      * @param $url  Request Target URL
+     * @param $header HTTP REQUEST HEADER
      */
 
-    public function httpRequest($url){
+    public function httpRequest($url,$header=array()){
         $ch = curl_init();
         curl_setopt($ch,CURLOPT_URL,$url);
+        curl_setopt($ch,CURLOPT_HTTPHEADER,$header);
         curl_setopt($ch,CURLOPT_TIMEOUT,5);
         curl_setopt($ch,CURLOPT_RETURNTRANSFER,1);
         $output = curl_exec($ch);
@@ -171,6 +206,21 @@ class IndexController extends Controller
         return $serverIp;
     }
 
+    /**
+     * @param $city  城市
+     */
+    public function getWeather($city){
+        $requestUrl= $this->_weatherUrl.'?city='.$city;
+        $header =   $header = array(
+            'apikey: '.$this->_apiKey,
+        );
+        $result = $this->httpRequest($requestUrl,$header);
+        $resultArr = json_decode($result,true);
+        return $resultArr;
+    }
+
+
+
     public function show(){
         $token = $this->getAccessToken();
         $serverIp = $this->getWXServerIp();
@@ -179,8 +229,32 @@ class IndexController extends Controller
     }
 
 	public function test(){
-		phpinfo();
+        var_dump(self::$_CITY);
+        echo '<hr/>';
+        var_dump(array('北京','上海'));
+        exit;
+        $result = $this->getWeather("桂林");
+        print_r($result);
+        echo '<hr/>';
+        $result = $this->getWeather('南宁');
+        print_r($result['HeWeather data service 3.0'][0]['daily_forecast'][0]['tmp']['max']);exit;
+        //phpinfo();exit;
+        $m = new \Memcache();
+        $m->addServer("47.89.11.105",'11211');
+        $m->set('k',md5('ii'));
+        $i = $m->get('k');
+        var_dump($i);
 	}
 
+    protected function mysqlAction(){
+        $mysqlClient = mysqli_connect('47.89.11.105','root', 'moting99a', 'weixin', '3306');
+        $query = $mysqlClient->query('select `name_chs` from t_location WHERE parent_id != 0 limit 20');
+        $res = $query->fetch_all();
+        $data = array();
+        foreach($res as $v){
+            array_push($data,$v[0]);
+        }
+        return $data;
+    }
 
 }
