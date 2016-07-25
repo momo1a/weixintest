@@ -32,10 +32,6 @@ class IndexController extends Controller
 
     protected static $_CITY = array();
 
-    public function __construct(){
-        self::$_CITY = $this->mysqlAction();
-    }
-
     public function index()
     {
         //echo "hello weixin";
@@ -142,7 +138,7 @@ class IndexController extends Controller
                         exit;
                         /** 多图文end **/
                     default:
-                        if(in_array(trim($postObj->Content),self::$_CITY)){
+                        if(in_array(trim($postObj->Content),$this->mysqlAction())){
                             $value = $this->getWeather(trim($postObj->Content));
                             $max = $value['HeWeather data service 3.0'][0]['daily_forecast'][0]['tmp']['max'];
                             $min = $value['HeWeather data service 3.0'][0]['daily_forecast'][0]['tmp']['min'];
@@ -229,7 +225,7 @@ class IndexController extends Controller
     }
 
 	public function test(){
-        var_dump(self::$_CITY);
+        var_dump($this->mysqlAction());
         echo '<hr/>';
         var_dump(array('北京','上海'));
         exit;
@@ -246,7 +242,7 @@ class IndexController extends Controller
         var_dump($i);
 	}
 
-    protected function mysqlAction(){
+    public function mysqlAction(){
         $mysqlClient = mysqli_connect('47.89.11.105','root', 'moting99a', 'weixin', '3306');
         $query = $mysqlClient->query('select `name_chs` from t_location WHERE parent_id != 0 limit 20');
         $res = $query->fetch_all();
