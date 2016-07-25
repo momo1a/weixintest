@@ -138,7 +138,8 @@ class IndexController extends Controller
                         exit;
                         /** 多图文end **/
                     default:
-                        if(in_array(trim($postObj->Content),$this->mysqlAction())){
+                        // $this->mysqlAction()
+                        if(in_array(trim($postObj->Content),array('北京','上海'))){
                             $value = $this->getWeather(trim($postObj->Content));
                             $max = $value['HeWeather data service 3.0'][0]['daily_forecast'][0]['tmp']['max'];
                             $min = $value['HeWeather data service 3.0'][0]['daily_forecast'][0]['tmp']['min'];
