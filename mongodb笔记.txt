@@ -909,6 +909,7 @@ db.createUser(
     ]
   }
  )
+ db.createUser({user:"logUserAdmin",pwd:"zhs123",roles:[{role:"userAdmin",db:"log"}]});
 
 db.createUser({user: "testOwner",pwd: "zhs123",roles: [ { role: "dbOwner", db: "test" }]});
 
@@ -927,4 +928,18 @@ db.grantRolesToUser(  //授权
 runuser -s /bin/bash mongod -c '/usr/bin/mongos --configdb 192.168.61.97:27024 --port 27023 --logpath=/data/mongodb/shard/s4/log/route.log --keyFile /data/mongodb/shard/s4/key.d/mongod.key --fork ' &
 
 
+在test库下用testAdmin新建的用户  因为testAdmin 有test库 的 userAdmin 角色的权限
+
+ db.createUser(
+  {
+    user: "testEdit",
+    pwd: "zhs123",
+    roles: [
+       { role: "readWrite", db: "test" }
+    ]
+  }
+ )
+
+db.createUser({user:"logDBAdmin",pwd:"zhs123",roles:[{role:"readWrite",db:"log"}]});
+mongo --host 47.89.11.105 --port 27017  -u logDBAdmin -p zhs123 --authenticationDatabase log  //登陆
 

@@ -32,13 +32,12 @@ class IndexController extends Controller
 
     protected static $_CITY = array();
 
-    public function __construct(){
+   /* public function __construct(){
         self::$_CITY = $this->mysqlAction();
-    }
+    }*/
 
     public function index()
     {
-        //echo "hello weixin";
         // 将timestamp nonce token 按字典排序
         // 将排序后的三个参数拼接 sha1加密
         // 将加密后的字符串跟signature进行对比判断是否来自微信
